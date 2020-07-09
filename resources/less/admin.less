@@ -1,0 +1,85 @@
+@import 'common';
+
+.AuditPage {
+    background: #eeeeee;
+    min-height: calc(~'100vh - 53px'); // Header is 52px tall. Remove 1 more pixel to prevent scrollbar
+}
+
+.AuditPageContainer {
+    max-width: 800px;
+    margin: 0 auto;
+    background: @body-bg;
+}
+
+.AuditHeader {
+    background: #684ba6;
+    padding: 25px 30px;
+    min-height: 120px;
+    color: white;
+    overflow: hidden;
+    position: relative;
+
+    .AuditBanner {
+        font-size: 200px;
+        position: absolute;
+        right: -20px;
+        top: 20px;
+
+        @media @phone {
+            & {
+                display: none;
+            }
+        }
+    }
+
+    h1 {
+        margin: 0 0 15px 0;
+
+        .badge {
+            display: inline-block;
+            vertical-align: top;
+            border-radius: 5px;
+            padding: 4px;
+            margin-left: 10px;
+            margin-top: 4px;
+            font-size: 0.5em;
+            background: white;
+            color: #684ba6;
+        }
+    }
+
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        li {
+            display: inline-block;
+
+            &:not(:first-child)::before {
+                content: '-';
+                color: #ccc;
+                margin: 0 0.5em;
+            }
+        }
+    }
+
+    a {
+        color: inherit;
+    }
+
+    .AuditUpgrade {
+        border: 1px solid white;
+        border-radius: 5px;
+        padding: 5px 20px;
+        margin-left: 40px;
+        font-size: 0.9em;
+        font-weight: normal;
+
+        &:hover {
+            text-decoration: none;
+            background: white;
+            color: #684ba6;
+        }
+    }
+}

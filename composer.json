@@ -1,0 +1,46 @@
+{
+    "name": "kilowhat/flarum-ext-audit-free",
+    "description": "Audit log for Flarum",
+    "keywords": [
+        "flarum"
+    ],
+    "type": "flarum-extension",
+    "license": "proprietary",
+    "require": {
+        "flarum/core": ">=0.1.0-beta.13 <0.1.0-beta.14",
+        "ext-json": "*"
+    },
+    "replace": {
+        "kilowhat/flarum-ext-audit": "*",
+        "kilowhat/flarum-ext-audit-pro": "*"
+    },
+    "conflict": {
+        "kilowhat/flarum-ext-audit": "*",
+        "kilowhat/flarum-ext-audit-pro": "*"
+    },
+    "authors": [
+        {
+            "name": "Clark Winkelmann",
+            "email": "clark.winkelmann@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Kilowhat\\Audit\\": "src/"
+        }
+    },
+    "extra": {
+        "flarum-extension": {
+            "title": "Audit Free",
+            "icon": {
+                "name": "fas fa-book",
+                "backgroundColor": "#684ba6",
+                "color": "#fff"
+            }
+        },
+        "flagrow": {
+            "discuss": "https://discuss.flarum.org/d/24432"
+        }
+    }
+}
