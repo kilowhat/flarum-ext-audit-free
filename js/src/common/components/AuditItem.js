@@ -173,7 +173,7 @@ export default class AuditItem extends Component {
 
                 post: m('a', {
                     href: post && post.discussion() ? app.route.post(post) : '#',
-                }, post ? (post.contentType() === 'comment' ? 'Comment' : 'Post') : app.translator.trans(translationPrefix + 'deletedResource.post', {
+                }, post ? app.translator.trans(translationPrefix + 'genericResource.' + (post.contentType() === 'comment' ? 'comment' : 'post')) : app.translator.trans(translationPrefix + 'deletedResource.post', {
                     id: payload.post_id,
                 })),
 
@@ -211,6 +211,16 @@ export default class AuditItem extends Component {
                 new_tags: formatTags(payload.new_tags),
 
                 post_count: payload.post_count,
+
+                old_user: payload.old_user_id ? app.translator.trans(translationPrefix + 'deletedResource.user', {
+                    id: payload.old_user_id,
+                }) : m('em', app.translator.trans(translationPrefix + 'noValue')),
+                new_user: payload.new_user_id ? app.translator.trans(translationPrefix + 'deletedResource.user', {
+                    id: payload.new_user_id,
+                }) : m('em', app.translator.trans(translationPrefix + 'noValue')),
+
+                old_date: payload.old_date ? moment(payload.old_date).format('LLLL') : m('em', app.translator.trans(translationPrefix + 'noValue')),
+                new_date: payload.new_date ? moment(payload.new_date).format('LLLL') : m('em', app.translator.trans(translationPrefix + 'noValue')),
             };
 
             formattedPayload = app.translator.trans(translationKeyForPayload, parameters);
