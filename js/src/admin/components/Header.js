@@ -42,7 +42,7 @@ export default class Header extends Component {
                     icon('fas fa-external-link-alt'),
                 ])),
                 m('li', app.translator.trans(translationPrefix + 'version', {
-                    version: app.data.extensions['kilowhat-wordpress'].version,
+                    version: app.data.extensions['kilowhat-audit-free'].version,
                 })),
             ]),
         ]);
