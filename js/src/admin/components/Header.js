@@ -1,12 +1,11 @@
 import app from 'flarum/app';
-import Component from 'flarum/Component';
 import icon from 'flarum/helpers/icon';
 
 /* global m */
 
 const translationPrefix = 'kilowhat-audit.admin.header.';
 
-export default class Header extends Component {
+export default class Header {
     view() {
         return m('.AuditHeader', [
             icon('fas fa-book', {

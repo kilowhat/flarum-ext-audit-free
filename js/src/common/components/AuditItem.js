@@ -1,5 +1,4 @@
 import app from 'flarum/app';
-import Component from 'flarum/Component';
 import Badge from 'flarum/components/Badge';
 import Button from 'flarum/components/Button';
 import Dropdown from 'flarum/components/Dropdown';
@@ -65,15 +64,13 @@ function formatTags(tagSlugs) {
     return tagSlugsCopy.map((slug, index) => [index > 0 ? ', ' : null, m('code', slug)]);
 }
 
-export default class AuditItem extends Component {
-    init() {
-        super.init();
-
+export default class AuditItem {
+    oninit() {
         this.showRaw = false;
     }
 
-    view() {
-        const {log} = this.props;
+    view(vnode) {
+        const {log, changeQuery} = vnode.attrs;
 
         const actor = log.actor();
         const payload = log.payload() || {};
@@ -87,7 +84,7 @@ export default class AuditItem extends Component {
         if (log.ipAddress()) {
             clientRow.push(m('a', {
                 onclick: () => {
-                    this.props.changeQuery('ip:' + log.ipAddress());
+                    changeQuery('ip:' + log.ipAddress());
                 },
             }, log.ipAddress()));
         }
@@ -95,7 +92,7 @@ export default class AuditItem extends Component {
         if (log.client() !== 'session' && log.client() !== 'cli') {
             clientRow.push(m('a', {
                 onclick: () => {
-                    this.props.changeQuery('client:' + log.client());
+                    changeQuery('client:' + log.client());
                 },
             }, app.translator.trans(translationPrefix + 'client.' + log.client())));
         }
@@ -122,19 +119,19 @@ export default class AuditItem extends Component {
         if (log.client() === 'cli') {
             usernameElement = m('a', {
                 onclick: () => {
-                    this.props.changeQuery('client:cli');
+                    changeQuery('client:cli');
                 },
             }, app.translator.trans(translationPrefix + 'client.cli'));
         } else if (log.actorId() === null) {
             usernameElement = m('a', {
                 onclick: () => {
-                    this.props.changeQuery('actor:guest');
+                    changeQuery('actor:guest');
                 },
             }, app.translator.trans(translationPrefix + 'withoutActor'));
         } else if (actor) {
             usernameElement = m('a', {
                 onclick: () => {
-                    this.props.changeQuery('actor:' + actor.username());
+                    changeQuery('actor:' + actor.username());
                 },
             }, username(actor));
         } else {
@@ -221,6 +218,8 @@ export default class AuditItem extends Component {
 
                 old_date: payload.old_date ? moment(payload.old_date).format('LLLL') : m('em', app.translator.trans(translationPrefix + 'noValue')),
                 new_date: payload.new_date ? moment(payload.new_date).format('LLLL') : m('em', app.translator.trans(translationPrefix + 'noValue')),
+
+                reason: payload.reason ? m('code', payload.reason) : m('em', app.translator.trans(translationPrefix + 'noReason')),
             };
 
             formattedPayload = app.translator.trans(translationKeyForPayload, parameters);
@@ -235,78 +234,70 @@ export default class AuditItem extends Component {
         const controls = new ItemList();
 
         controls.add('raw', Button.component({
-            children: app.translator.trans(translationPrefix + 'controls.' + (this.showRaw ? 'hideRaw' : 'showRaw')),
             onclick: () => {
                 this.showRaw = !this.showRaw;
             },
-        }));
+        }, app.translator.trans(translationPrefix + 'controls.' + (this.showRaw ? 'hideRaw' : 'showRaw'))));
 
         if (actor) {
             controls.add('actor', Button.component({
-                children: app.translator.trans(translationPrefix + 'controls.filterActor'),
                 onclick: () => {
-                    this.props.changeQuery('actor:' + actor.username());
+                    changeQuery('actor:' + actor.username());
                 },
-            }));
+            }, app.translator.trans(translationPrefix + 'controls.filterActor')));
         }
 
         if (log.ipAddress()) {
             controls.add('ip', Button.component({
-                children: app.translator.trans(translationPrefix + 'controls.filterIp'),
                 onclick: () => {
-                    this.props.changeQuery('ip:' + log.ipAddress());
+                    changeQuery('ip:' + log.ipAddress());
                 },
-            }));
+            }, app.translator.trans(translationPrefix + 'controls.filterIp')));
         }
 
         controls.add('client', Button.component({
-            children: app.translator.trans(translationPrefix + 'controls.filterClient'),
             onclick: () => {
-                this.props.changeQuery('client:' + log.client());
+                changeQuery('client:' + log.client());
             },
-        }));
+        }, app.translator.trans(translationPrefix + 'controls.filterClient')));
 
         controls.add('action', Button.component({
-            children: app.translator.trans(translationPrefix + 'controls.filterAction'),
             onclick: () => {
-                this.props.changeQuery('action:' + log.action());
+                changeQuery('action:' + log.action());
             },
-        }));
+        }, app.translator.trans(translationPrefix + 'controls.filterAction')));
 
         if (user) {
             controls.add('user', Button.component({
-                children: app.translator.trans(translationPrefix + 'controls.filterUser'),
                 onclick: () => {
-                    this.props.changeQuery('user:' + user.username());
+                    changeQuery('user:' + user.username());
                 },
-            }));
+            }, app.translator.trans(translationPrefix + 'controls.filterUser')));
         }
 
         if (payload.discussion_id) {
             controls.add('discussion', Button.component({
-                children: app.translator.trans(translationPrefix + 'controls.filterDiscussion'),
                 onclick: () => {
-                    this.props.changeQuery('discussion:' + payload.discussion_id);
+                    changeQuery('discussion:' + payload.discussion_id);
                 },
-            }));
+            }, app.translator.trans(translationPrefix + 'controls.filterDiscussion')));
         }
 
         return m('.AuditItem', [
             m('.AuditItemAvatar', avatarElement),
             m('.AuditItemData', [
                 Dropdown.component({
-                    children: controls.toArray(),
                     menuClassName: 'Dropdown-menu--right',
                     buttonClassName: 'Button Button--icon Button--flat',
                     label: app.translator.trans(translationPrefix + 'controls'),
                     icon: 'fas fa-ellipsis-v',
-                }),
+                }, controls.toArray()),
                 m('.AuditItemRow', [
                     usernameElement,
                     ' - ',
                     m('a', {
                         onclick: () => {
-                            this.props.changeQuery('action:' + log.action());
+                            changeQuery('action:' + log.action());
                         },
                     }, log.action()),
                 ]),

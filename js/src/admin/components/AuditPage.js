@@ -7,8 +7,8 @@ import Header from './Header';
 export default class AuditPage extends Page {
     view() {
         return m('.AuditPage', m('.AuditPageContainer', [
-            Header.component(),
-            AuditBrowser.component(),
+            m(Header),
+            m(AuditBrowser),
         ]));
     }
 }

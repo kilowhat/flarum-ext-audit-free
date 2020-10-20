@@ -10,7 +10,9 @@ import AuditItem from './AuditItem';
 const translationPrefix = 'kilowhat-audit.lib.browser.';
 
 export default class AuditBrowser extends Component {
-    init() {
+    oninit(vnode) {
+        super.oninit(vnode);
+
         this.q = '';
         this.loading = true;
         this.moreResults = false;
@@ -26,10 +28,9 @@ export default class AuditBrowser extends Component {
             loading = LoadingIndicator.component();
         } else if (this.moreResults) {
             loading = Button.component({
-                children: app.translator.trans(translationPrefix + 'loadMore'),
                 className: 'Button Button--block',
                 onclick: this.loadMore.bind(this),
-            });
+            }, app.translator.trans(translationPrefix + 'loadMore'));
         }
 
         return m('div', [
@@ -56,13 +57,12 @@ export default class AuditBrowser extends Component {
                     onclick: () => {
                         this.refresh();
                     },
-                    children: app.translator.trans(translationPrefix + 'filterApply'),
-                }),
+                }, app.translator.trans(translationPrefix + 'filterApply')),
             ]),
             this.logs.length === 0 && !this.loading ? Placeholder.component({
                 text: app.translator.trans(translationPrefix + 'empty'),
             }) : null,
-            m('.AuditList', this.logs.map(log => AuditItem.component({
+            m('.AuditList', this.logs.map(log => m(AuditItem, {
                 log,
                 changeQuery: q => {
                     this.q = q;
@@ -76,7 +76,7 @@ export default class AuditBrowser extends Component {
     requestParams() {
         const params = {filter: {}};
 
-        let q = this.props.baseQ || '';
+        let q = this.attrs.baseQ || '';
 
         if (this.q) {
             q += ' ' + this.q;
@@ -127,7 +127,7 @@ export default class AuditBrowser extends Component {
         this.loading = false;
         this.moreResults = !!results.payload.links.next;
 
-        m.lazyRedraw();
+        m.redraw();
 
         return results;
     }

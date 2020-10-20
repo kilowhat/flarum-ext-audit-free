@@ -9,17 +9,16 @@ import AuditPage from './components/AuditPage';
 export default function () {
     app.routes['kilowhat-audit'] = {
         path: '/audit',
-        component: AuditPage.component(),
+        component: AuditPage,
     };
 
-    app.extensionSettings['kilowhat-audit-free'] = () => m.route(app.route('kilowhat-audit'));
+    app.extensionSettings['kilowhat-audit-free'] = () => m.route.set(app.route('kilowhat-audit'));
 
     extend(AdminNav.prototype, 'items', items => {
         items.add('kilowhat-audit', AdminLinkButton.component({
             href: app.route('kilowhat-audit'),
             icon: 'fas fa-book',
-            children: app.translator.trans('kilowhat-audit.admin.menu.title'),
             description: app.translator.trans('kilowhat-audit.admin.menu.description'),
-        }));
+        }, app.translator.trans('kilowhat-audit.admin.menu.title')));
     });
 }
