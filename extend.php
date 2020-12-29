@@ -32,7 +32,6 @@ return [
     new Extenders\FlarumSuspendEvents(),
     new Extenders\FlarumTagsEvents(),
 
-    function (Application $app) {
-        $app->register(Providers\SearchServiceProvider::class);
-    },
+    (new Extend\ServiceProvider())
+        ->register(Providers\SearchServiceProvider::class),
 ];

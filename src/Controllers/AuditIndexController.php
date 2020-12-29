@@ -6,7 +6,6 @@ use Flarum\Api\Controller\AbstractListController;
 use Flarum\Extension\ExtensionManager;
 use Flarum\Http\UrlGenerator;
 use Flarum\Search\SearchCriteria;
-use Flarum\User\AssertPermissionTrait;
 use Illuminate\Support\Arr;
 use Kilowhat\Audit\AuditSerializer;
 use Kilowhat\Audit\Search\AuditSearcher;
@@ -15,8 +14,6 @@ use Tobscure\JsonApi\Document;
 
 class AuditIndexController extends AbstractListController
 {
-    use AssertPermissionTrait;
-
     public $serializer = AuditSerializer::class;
 
     public $include = [
@@ -59,7 +56,7 @@ class AuditIndexController extends AbstractListController
     {
         $actor = $request->getAttribute('actor');
 
-        $this->assertAdmin($actor);
+        $actor->assertAdmin();
 
         if ($this->extensions->isEnabled('flarum-tags')) {
             $this->include[] = 'tag';

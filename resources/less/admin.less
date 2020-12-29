@@ -1,41 +1,13 @@
 @import 'common';
 
 .AuditPage {
-    background: #eeeeee;
-    min-height: calc(~'100vh - 53px'); // Header is 52px tall. Remove 1 more pixel to prevent scrollbar
-}
+    .ExtensionPage-header {
+        background: #684ba6;
+        color: white;
+        overflow: hidden;
+        position: relative;
 
-.AuditPageContainer {
-    max-width: 800px;
-    margin: 0 auto;
-    background: @body-bg;
-}
-
-.AuditHeader {
-    background: #684ba6;
-    padding: 25px 30px;
-    min-height: 120px;
-    color: white;
-    overflow: hidden;
-    position: relative;
-
-    .AuditBanner {
-        font-size: 200px;
-        position: absolute;
-        right: -20px;
-        top: 20px;
-
-        @media @phone {
-            & {
-                display: none;
-            }
-        }
-    }
-
-    h1 {
-        margin: 0 0 15px 0;
-
-        .badge {
+        h2 .badge {
             display: inline-block;
             vertical-align: top;
             border-radius: 5px;
@@ -46,40 +18,48 @@
             background: white;
             color: #684ba6;
         }
-    }
 
-    ul {
-        margin: 0;
-        padding: 0;
-        list-style: none;
+        .AuditBanner {
+            font-size: 200px;
+            position: absolute;
+            right: -20px;
+            top: 20px;
+            color: fade(white, 20%);
 
-        li {
-            display: inline-block;
-
-            &:not(:first-child)::before {
-                content: '-';
-                color: #ccc;
-                margin: 0 0.5em;
+            @media @phone {
+                & {
+                    display: none;
+                }
             }
         }
-    }
 
-    a {
-        color: inherit;
-    }
+        .AuditUpgrade {
+            border: 1px solid white;
+            border-radius: 5px;
+            padding: 5px 20px;
+            margin-left: 40px;
+            font-size: 0.9em;
+            font-weight: normal;
+            color: white;
 
-    .AuditUpgrade {
-        border: 1px solid white;
-        border-radius: 5px;
-        padding: 5px 20px;
-        margin-left: 40px;
-        font-size: 0.9em;
-        font-weight: normal;
+            &:hover {
+                text-decoration: none;
+                background: white;
+                color: #684ba6;
+            }
+        }
 
-        &:hover {
-            text-decoration: none;
-            background: white;
-            color: #684ba6;
+        h2,
+        .helpText,
+        ul > li,
+        ul > li > a,
+        .ExtensionInfo .item-authors a {
+            color: inherit;
         }
     }
+}
+
+.AuditPage .ExtensionPage-header .container,
+.AuditPageContainer {
+    max-width: 850px;
 }

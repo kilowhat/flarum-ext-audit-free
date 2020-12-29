@@ -21,7 +21,8 @@ class FlarumTagsEvents implements ExtenderInterface
         AuditLogger::log('discussion.tagged', [
             'discussion_id' => $event->discussion->id,
             'old_tags' => Arr::pluck($event->oldTags, 'slug'),
-            'new_tags' => $event->discussion->tags->pluck('slug'),
+            // Can't use pre-loaded ->tags because of https://github.com/flarum/core/issues/2514
+            'new_tags' => $event->discussion->tags()->pluck('slug')->all(),
         ]);
     }
 }

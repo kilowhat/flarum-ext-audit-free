@@ -7,7 +7,7 @@
     "type": "flarum-extension",
     "license": "proprietary",
     "require": {
-        "flarum/core": ">=0.1.0-beta.14 <0.1.0-beta.15",
+        "flarum/core": ">=0.1.0-beta.15 <0.1.0-beta.16",
         "ext-json": "*"
     },
     "replace": {
@@ -21,10 +21,15 @@
     "authors": [
         {
             "name": "Clark Winkelmann",
+            "homepage": "https://kilowhat.net/",
             "email": "clark.winkelmann@gmail.com",
             "role": "Developer"
         }
     ],
+    "support": {
+        "docs": "https://kilowhat.net/flarum/extensions/audit",
+        "forum": "https://discuss.flarum.org/d/24206"
+    },
     "autoload": {
         "psr-4": {
             "Kilowhat\\Audit\\": "src/"
@@ -33,6 +38,7 @@
     "extra": {
         "flarum-extension": {
             "title": "Audit Free",
+            "category": "moderation",
             "icon": {
                 "name": "fas fa-book",
                 "backgroundColor": "#684ba6",
