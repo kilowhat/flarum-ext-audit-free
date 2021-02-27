@@ -11,7 +11,7 @@ import Group from 'flarum/models/Group';
 import extractText from 'flarum/utils/extractText';
 import ItemList from 'flarum/utils/ItemList';
 
-/* global m, moment */
+/* global m, dayjs */
 
 const translationPrefix = 'kilowhat-audit.lib.browser.';
 
@@ -178,7 +178,7 @@ export default class AuditItem {
                     href: post && post.user() ? app.route.user(post.user()) : '#',
                 }, username(post ? post.user() : null)),
 
-                until: payload.until ? moment(payload.until).format('LLLL') : '?',
+                until: payload.until ? dayjs(payload.until).format('LLLL') : '?',
 
                 old_title: m('em', payload.old_title),
 
@@ -216,8 +216,8 @@ export default class AuditItem {
                     id: payload.new_user_id,
                 }) : m('em', app.translator.trans(translationPrefix + 'noValue')),
 
-                old_date: payload.old_date ? moment(payload.old_date).format('LLLL') : m('em', app.translator.trans(translationPrefix + 'noValue')),
-                new_date: payload.new_date ? moment(payload.new_date).format('LLLL') : m('em', app.translator.trans(translationPrefix + 'noValue')),
+                old_date: payload.old_date ? dayjs(payload.old_date).format('LLLL') : m('em', app.translator.trans(translationPrefix + 'noValue')),
+                new_date: payload.new_date ? dayjs(payload.new_date).format('LLLL') : m('em', app.translator.trans(translationPrefix + 'noValue')),
 
                 reason: payload.reason ? m('code', payload.reason) : m('em', app.translator.trans(translationPrefix + 'noReason')),
             };

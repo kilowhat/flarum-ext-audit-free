@@ -31,7 +31,6 @@ class CoreUserEvents implements ExtenderInterface
         $container['events']->listen(Event\PasswordChanged::class, [$this, 'passwordChanged']);
         $container['events']->listen(Event\Registered::class, [$this, 'registered']);
         $container['events']->listen(Event\Renamed::class, [$this, 'renamed']);
-        $container['events']->listen(Event\Saving::class, [$this, 'saving']);
 
         PasswordToken::created(function (PasswordToken $token) {
             $this->log($token->user, 'password_change_requested');
@@ -51,6 +50,12 @@ class CoreUserEvents implements ExtenderInterface
                     'identifier' => $provider->identifier,
                 ]);
             }
+        });
+
+        User::saving(function (User $user) {
+            // There's no way of accessing the original email from EmailChanged, so we save it beforehand
+            // We can't use the core user saving event because it's not dispatched in ConfirmEmailHandler
+            $this->originalEmail = $user->getOriginal('email');
         });
     }
 
@@ -171,11 +176,5 @@ class CoreUserEvents implements ExtenderInterface
             'old_username' => $event->oldUsername,
             'new_username' => $event->user->username,
         ]);
-    }
-
-    public function saving(Event\Saving $event)
-    {
-        // There's no way of accessing the original email from EmailChanged, so we save it beforehand
-        $this->originalEmail = $event->user->getOriginal('email');
     }
 }
