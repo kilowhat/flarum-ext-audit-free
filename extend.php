@@ -3,7 +3,6 @@
 namespace Kilowhat\Audit;
 
 use Flarum\Extend;
-use Flarum\Foundation\Application;
 
 return [
     (new Extend\Frontend('admin'))
@@ -31,6 +30,15 @@ return [
     new Extenders\FlarumStickyEvents(),
     new Extenders\FlarumSuspendEvents(),
     new Extenders\FlarumTagsEvents(),
+
+    (new Extend\SimpleFlarumSearch(Search\AuditSearcher::class))
+        ->setFullTextGambit(Search\Gambits\NoOpFullTextGambit::class)
+        ->addGambit(Search\Gambits\ActionGambit::class)
+        ->addGambit(Search\Gambits\ActorGambit::class)
+        ->addGambit(Search\Gambits\ClientGambit::class)
+        ->addGambit(Search\Gambits\DiscussionGambit::class)
+        ->addGambit(Search\Gambits\IpGambit::class)
+        ->addGambit(Search\Gambits\UserGambit::class),
 
     (new Extend\ServiceProvider())
         ->register(Providers\SearchServiceProvider::class),

@@ -35,13 +35,20 @@ class FlarumFlagsEvents implements ExtenderInterface
              * @var $this HasMany
              */
 
+            $parent = $this->getParent();
+
+            $shouldLog = false;
+
+            // Additional logic for logging
+            // because flarum/flags calls this every time a post is deleted, we need to check if there were actual flags
+            if ($parent instanceof Post && $this->getQuery()->getModel() instanceof Flag && $this->getQuery()->count()) {
+                $shouldLog = true;
+            }
+
             // Replicates code from Relation::__call
             $result = $this->forwardCallTo($this->getQuery(), 'delete', func_get_args());
 
-            $parent = $this->getParent();
-
-            // Additional logic for logging
-            if ($parent instanceof Post && $this->getQuery()->getModel() instanceof Flag) {
+            if ($shouldLog) {
                 AuditLogger::log('post.dismissed_flags', [
                     'discussion_id' => $parent->discussion->id,
                     'post_id' => $parent->id,

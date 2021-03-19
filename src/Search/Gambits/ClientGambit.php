@@ -3,20 +3,17 @@
 namespace Kilowhat\Audit\Search\Gambits;
 
 use Flarum\Search\AbstractRegexGambit;
-use Flarum\Search\AbstractSearch;
-use Kilowhat\Audit\Search\AuditSearch;
-use LogicException;
+use Flarum\Search\SearchState;
 
 class ClientGambit extends AbstractRegexGambit
 {
-    protected $pattern = 'client:(.+)';
-
-    protected function conditions(AbstractSearch $search, array $matches, $negate)
+    protected function getGambitPattern()
     {
-        if (!$search instanceof AuditSearch) {
-            throw new LogicException('This gambit can only be applied on an AuditSearch');
-        }
+        return 'client:(.+)';
+    }
 
+    protected function conditions(SearchState $search, array $matches, $negate)
+    {
         $clients = explode(',', trim($matches[1], '"'));
 
         $search->getQuery()->whereIn('client', $clients, 'and', $negate);

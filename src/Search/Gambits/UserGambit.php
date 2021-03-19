@@ -3,15 +3,11 @@
 namespace Kilowhat\Audit\Search\Gambits;
 
 use Flarum\Search\AbstractRegexGambit;
-use Flarum\Search\AbstractSearch;
+use Flarum\Search\SearchState;
 use Flarum\User\UserRepository;
-use Kilowhat\Audit\Search\AuditSearch;
-use LogicException;
 
 class UserGambit extends AbstractRegexGambit
 {
-    protected $pattern = 'user:(.+)';
-
     protected $users;
 
     public function __construct(UserRepository $users)
@@ -19,12 +15,13 @@ class UserGambit extends AbstractRegexGambit
         $this->users = $users;
     }
 
-    protected function conditions(AbstractSearch $search, array $matches, $negate)
+    protected function getGambitPattern()
     {
-        if (!$search instanceof AuditSearch) {
-            throw new LogicException('This gambit can only be applied on an AuditSearch');
-        }
+        return 'user:(.+)';
+    }
 
+    protected function conditions(SearchState $search, array $matches, $negate)
+    {
         $usernames = explode(',', trim($matches[1], '"'));
 
         $ids = [];

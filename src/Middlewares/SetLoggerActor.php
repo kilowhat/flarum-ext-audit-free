@@ -2,7 +2,6 @@
 
 namespace Kilowhat\Audit\Middlewares;
 
-use Illuminate\Support\Arr;
 use Kilowhat\Audit\AuditLogger;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -13,7 +12,7 @@ class SetLoggerActor implements MiddlewareInterface
 {
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        AuditLogger::$ipAddress = Arr::get($request->getServerParams(), 'REMOTE_ADDR');
+        AuditLogger::$ipAddress = $request->getAttribute('ipAddress');
         AuditLogger::$actor = $request->getAttribute('actor');
         AuditLogger::$path = $request->getUri()->getPath();
 

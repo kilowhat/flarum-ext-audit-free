@@ -21,7 +21,6 @@ class CoreUserEvents implements ExtenderInterface
     {
         $container['events']->listen(Event\Activated::class, [$this, 'activated']);
         $container['events']->listen(Event\AvatarChanged::class, [$this, 'avatarChanged']);
-        $container['events']->listen(Event\AvatarSaving::class, [$this, 'avatarSaving']);
         $container['events']->listen(Event\Deleted::class, [$this, 'deleted']);
         $container['events']->listen(Event\EmailChangeRequested::class, [$this, 'emailChangeRequested']);
         $container['events']->listen(Event\EmailChanged::class, [$this, 'emailChanged']);
@@ -90,32 +89,6 @@ class CoreUserEvents implements ExtenderInterface
         $this->log($event->user, $event->user->avatar_url ? 'avatar_changed' : 'avatar_removed');
     }
 
-    public function avatarSaving(Event\AvatarSaving $event)
-    {
-        // Used to work around the missing call to dispatchEventsFor() in UploadAvatarHandler
-        // TODO: remove once fixed in Flarum
-        $event->user->afterSave(function (User $user) use ($event) {
-            $hasSeenAvatarChanged = false;
-
-            foreach ($user->releaseEvents() as $afterSaveEvent) {
-                // There's a second issue with Flarum. Even if we dispatch the events, two events get dispatched
-                // for AvatarChanged (one when setting it to null, another setting it to something)
-                // Both events are identical so it doesn't matter which one we remove. We'll keep the first and ignore any other
-                if (get_class($afterSaveEvent) === Event\AvatarChanged::class) {
-                    if ($hasSeenAvatarChanged) {
-                        continue;
-                    }
-
-                    $hasSeenAvatarChanged = true;
-                }
-
-                $afterSaveEvent->actor = $event->actor;
-
-                app('events')->dispatch($afterSaveEvent);
-            }
-        });
-    }
-
     public function deleted(Event\Deleted $event)
     {
         $this->log($event->user, 'deleted');
@@ -139,7 +112,8 @@ class CoreUserEvents implements ExtenderInterface
     public function groupsChanged(Event\GroupsChanged $event)
     {
         $oldGroupIds = Arr::pluck($event->oldGroups, 'id');
-        $newGroupIds = $event->user->groups->pluck('id');
+        // Cannot directly read $user->groups because it's preloaded with old values, same issue as https://github.com/flarum/core/issues/2514
+        $newGroupIds = $event->user->groups()->pluck('id');
 
         if (json_encode($oldGroupIds) !== json_encode($newGroupIds)) {
             $this->log($event->user, 'groups_changed', [

@@ -5,7 +5,7 @@ namespace Kilowhat\Audit\Controllers;
 use Flarum\Api\Controller\AbstractListController;
 use Flarum\Extension\ExtensionManager;
 use Flarum\Http\UrlGenerator;
-use Flarum\Search\SearchCriteria;
+use Flarum\Query\QueryCriteria;
 use Illuminate\Support\Arr;
 use Kilowhat\Audit\AuditSerializer;
 use Kilowhat\Audit\Search\AuditSearcher;
@@ -62,16 +62,20 @@ class AuditIndexController extends AbstractListController
             $this->include[] = 'tag';
         }
 
-        $query = Arr::get($this->extractFilter($request), 'q');
+        $filters = $this->extractFilter($request) + [
+                'q' => '', // Provide default value for q, otherwise we would need a filterer in addition to searcher
+            ];
         $sort = $this->extractSort($request);
 
-        $criteria = new SearchCriteria($actor, $query, $sort);
+        $criteria = new QueryCriteria($actor, $filters, $sort);
 
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
         $load = Arr::only($this->extractInclude($request), 'actor'); // We can't preload the other relationships as they are not Eloquent relationships
 
-        $results = $this->searcher->search($criteria, $limit, $offset, $load);
+        $results = $this->searcher->search($criteria, $limit, $offset);
+
+        $results->getResults()->load($load);
 
         $document->addPaginationLinks(
             $this->url->to('api')->route('kilowhat-audit.index'),

@@ -3,20 +3,17 @@
 namespace Kilowhat\Audit\Search\Gambits;
 
 use Flarum\Search\AbstractRegexGambit;
-use Flarum\Search\AbstractSearch;
-use Kilowhat\Audit\Search\AuditSearch;
-use LogicException;
+use Flarum\Search\SearchState;
 
 class DiscussionGambit extends AbstractRegexGambit
 {
-    protected $pattern = 'discussion:(.+)';
-
-    protected function conditions(AbstractSearch $search, array $matches, $negate)
+    protected function getGambitPattern()
     {
-        if (!$search instanceof AuditSearch) {
-            throw new LogicException('This gambit can only be applied on an AuditSearch');
-        }
+        return 'discussion:(.+)';
+    }
 
+    protected function conditions(SearchState $search, array $matches, $negate)
+    {
         $ids = array_map(function ($id) {
             return intval($id); // Conversion to int is required for JSON comparison
         }, explode(',', trim($matches[1], '"')));
