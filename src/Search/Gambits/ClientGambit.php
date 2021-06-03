@@ -7,7 +7,7 @@ use Flarum\Search\SearchState;
 
 class ClientGambit extends AbstractRegexGambit
 {
-    protected function getGambitPattern()
+    protected function getGambitPattern(): string
     {
         return 'client:(.+)';
     }

@@ -7,7 +7,7 @@ use Flarum\Search\SearchState;
 
 class IpGambit extends AbstractRegexGambit
 {
-    protected function getGambitPattern()
+    protected function getGambitPattern(): string
     {
         return 'ip:(.+)';
     }

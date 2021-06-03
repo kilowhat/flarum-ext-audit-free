@@ -2,7 +2,6 @@
 
 namespace Kilowhat\Audit;
 
-
 use Carbon\Carbon;
 use Flarum\User\User;
 

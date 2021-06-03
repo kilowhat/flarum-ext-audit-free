@@ -8,6 +8,7 @@ use Flarum\Discussion\Discussion;
 use Flarum\Post\Post;
 use Flarum\Tags\Tag;
 use Flarum\User\User;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Arr;
 
 /**
@@ -30,33 +31,33 @@ class AuditLog extends AbstractModel
         'created_at' => 'datetime',
     ];
 
-    public function actor()
+    public function actor(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function getDiscussionAttribute()
+    public function getDiscussionAttribute(): ?Discussion
     {
         $discussionId = Arr::get($this->payload, 'discussion_id');
 
         return $discussionId ? Discussion::query()->find($discussionId) : null;
     }
 
-    public function getPostAttribute()
+    public function getPostAttribute(): ?Post
     {
         $postId = Arr::get($this->payload, 'post_id');
 
         return $postId ? Post::query()->find($postId) : null;
     }
 
-    public function getTagAttribute()
+    public function getTagAttribute(): ?Tag
     {
         $tagId = Arr::get($this->payload, 'tag_id');
 
         return $tagId ? Tag::query()->find($tagId) : null;
     }
 
-    public function getUserAttribute()
+    public function getUserAttribute(): ?User
     {
         $userId = Arr::get($this->payload, 'user_id');
 

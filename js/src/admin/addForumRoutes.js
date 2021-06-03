@@ -1,11 +1,11 @@
-import app from 'flarum/app';
+import app from 'flarum/admin/app';
 
 // When we are in the admin panel, the URL route builders for the frontend aren't available
 // So we add them if they are missing
 export default function () {
     if (!app.route.discussion) {
         app.route.discussion = discussion => {
-            return app.forum.attribute('baseUrl') + '/d/' + discussion.id();
+            return app.forum.attribute('baseUrl') + '/d/' + discussion.slug();
         };
     }
     if (!app.route.post) {
@@ -20,7 +20,7 @@ export default function () {
     }
     if (!app.route.user) {
         app.route.user = user => {
-            return app.forum.attribute('baseUrl') + '/u/' + user.username();
+            return app.forum.attribute('baseUrl') + '/u/' + user.slug();
         };
     }
 }

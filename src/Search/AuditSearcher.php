@@ -9,8 +9,6 @@ use Kilowhat\Audit\AuditLog;
 
 class AuditSearcher extends AbstractSearcher
 {
-    protected $gambits;
-
     protected function getQuery(User $actor): Builder
     {
         // Access control is managed at the controller level, not per record

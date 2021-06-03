@@ -1,15 +1,15 @@
 import app from 'flarum/app';
-import Badge from 'flarum/components/Badge';
-import Button from 'flarum/components/Button';
-import Dropdown from 'flarum/components/Dropdown';
-import GroupBadge from 'flarum/components/GroupBadge';
-import avatar from 'flarum/helpers/avatar';
-import humanTime from 'flarum/helpers/humanTime';
-import icon from 'flarum/helpers/icon';
-import username from 'flarum/helpers/username';
-import Group from 'flarum/models/Group';
-import extractText from 'flarum/utils/extractText';
-import ItemList from 'flarum/utils/ItemList';
+import Badge from 'flarum/common/components/Badge';
+import Button from 'flarum/common/components/Button';
+import Dropdown from 'flarum/common/components/Dropdown';
+import GroupBadge from 'flarum/common/components/GroupBadge';
+import avatar from 'flarum/common/helpers/avatar';
+import humanTime from 'flarum/common/helpers/humanTime';
+import icon from 'flarum/common/helpers/icon';
+import username from 'flarum/common/helpers/username';
+import Group from 'flarum/common/models/Group';
+import extractText from 'flarum/common/utils/extractText';
+import ItemList from 'flarum/common/utils/ItemList';
 
 /* global m, dayjs */
 
@@ -200,6 +200,9 @@ export default class AuditItem {
 
                 old_username: m('code', payload.old_username),
                 new_username: m('code', payload.new_username),
+
+                old_nickname: payload.old_nickname ? m('code', payload.old_nickname) : m('em', app.translator.trans(translationPrefix + 'noValue')),
+                new_nickname: payload.new_nickname ? m('code', payload.new_nickname) : m('em', app.translator.trans(translationPrefix + 'noValue')),
 
                 old_email: m('code', payload.old_email),
                 new_email: m('code', payload.new_email),

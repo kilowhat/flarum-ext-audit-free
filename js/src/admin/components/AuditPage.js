@@ -1,6 +1,6 @@
-import app from 'flarum/app';
-import ExtensionPage from 'flarum/components/ExtensionPage';
-import icon from 'flarum/helpers/icon';
+import app from 'flarum/admin/app';
+import ExtensionPage from 'flarum/admin/components/ExtensionPage';
+import icon from 'flarum/common/helpers/icon';
 import AuditBrowser from '../../common/components/AuditBrowser';
 
 /* global m */

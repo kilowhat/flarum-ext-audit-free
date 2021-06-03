@@ -27,6 +27,7 @@ return [
     new Extenders\FlarumApprovalEvents(),
     new Extenders\FlarumFlagsEvents(),
     new Extenders\FlarumLockEvents(),
+    new Extenders\FlarumNicknamesEvents(),
     new Extenders\FlarumStickyEvents(),
     new Extenders\FlarumSuspendEvents(),
     new Extenders\FlarumTagsEvents(),
@@ -39,7 +40,4 @@ return [
         ->addGambit(Search\Gambits\DiscussionGambit::class)
         ->addGambit(Search\Gambits\IpGambit::class)
         ->addGambit(Search\Gambits\UserGambit::class),
-
-    (new Extend\ServiceProvider())
-        ->register(Providers\SearchServiceProvider::class),
 ];

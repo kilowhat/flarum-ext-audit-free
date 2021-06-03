@@ -2,6 +2,7 @@
 
 namespace Kilowhat\Audit\Middlewares;
 
+use Flarum\Http\RequestUtil;
 use Kilowhat\Audit\AuditLogger;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -13,7 +14,7 @@ class SetLoggerActor implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         AuditLogger::$ipAddress = $request->getAttribute('ipAddress');
-        AuditLogger::$actor = $request->getAttribute('actor');
+        AuditLogger::$actor = RequestUtil::getActor($request);
         AuditLogger::$path = $request->getUri()->getPath();
 
         if ($request->getAttribute('session')) {

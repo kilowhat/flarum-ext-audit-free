@@ -45,13 +45,6 @@ class AuditIndexController extends AbstractListController
         $this->extensions = $extensions;
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     * @param Document $document
-     * @return mixed
-     * @throws \Tobscure\JsonApi\Exception\InvalidParameterException
-     * @throws \Flarum\User\Exception\PermissionDeniedException
-     */
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
@@ -75,7 +68,7 @@ class AuditIndexController extends AbstractListController
 
         $results = $this->searcher->search($criteria, $limit, $offset);
 
-        $results->getResults()->load($load);
+        $this->loadRelations($results->getResults(), $load);
 
         $document->addPaginationLinks(
             $this->url->to('api')->route('kilowhat-audit.index'),

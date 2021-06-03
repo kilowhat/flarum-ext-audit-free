@@ -1,4 +1,4 @@
-import app from 'flarum/app';
+import app from 'flarum/admin/app';
 import AuditLog from '../common/models/AuditLog';
 import AuditPage from './components/AuditPage';
 import addForumRoutes from './addForumRoutes';

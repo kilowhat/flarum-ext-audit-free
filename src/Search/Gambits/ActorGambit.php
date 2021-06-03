@@ -15,7 +15,7 @@ class ActorGambit extends AbstractRegexGambit
         $this->users = $users;
     }
 
-    protected function getGambitPattern()
+    protected function getGambitPattern(): string
     {
         return 'actor:(.+)';
     }
