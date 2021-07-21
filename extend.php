@@ -40,4 +40,7 @@ return [
         ->addGambit(Search\Gambits\DiscussionGambit::class)
         ->addGambit(Search\Gambits\IpGambit::class)
         ->addGambit(Search\Gambits\UserGambit::class),
+
+    (new Extend\ServiceProvider())
+        ->register(LoggerServiceProvider::class),
 ];
