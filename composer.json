@@ -16,10 +16,6 @@
         "kilowhat/flarum-ext-audit": "*",
         "kilowhat/flarum-ext-audit-pro": "*"
     },
-    "conflict": {
-        "kilowhat/flarum-ext-audit": "*",
-        "kilowhat/flarum-ext-audit-pro": "*"
-    },
     "authors": [
         {
             "name": "Clark Winkelmann",
