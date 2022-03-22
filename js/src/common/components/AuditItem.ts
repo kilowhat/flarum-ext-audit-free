@@ -1,4 +1,4 @@
-import app from 'flarum/app';
+import app from 'flarum/common/app';
 import Badge from 'flarum/common/components/Badge';
 import Button from 'flarum/common/components/Button';
 import Dropdown from 'flarum/common/components/Dropdown';
@@ -10,8 +10,6 @@ import username from 'flarum/common/helpers/username';
 import Group from 'flarum/common/models/Group';
 import extractText from 'flarum/common/utils/extractText';
 import ItemList from 'flarum/common/utils/ItemList';
-
-/* global m, dayjs */
 
 const translationPrefix = 'kilowhat-audit.lib.browser.';
 

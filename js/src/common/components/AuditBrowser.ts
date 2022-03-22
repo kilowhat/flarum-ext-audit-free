@@ -5,8 +5,6 @@ import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
 import Placeholder from 'flarum/common/components/Placeholder';
 import AuditItem from './AuditItem';
 
-/* global m */
-
 const translationPrefix = 'kilowhat-audit.lib.browser.';
 
 export default class AuditBrowser extends Component {
