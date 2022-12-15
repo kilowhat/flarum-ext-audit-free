@@ -1,3 +1,4 @@
+import {ClassComponent, Vnode} from 'mithril';
 import app from 'flarum/common/app';
 import Badge from 'flarum/common/components/Badge';
 import Button from 'flarum/common/components/Button';
@@ -10,11 +11,12 @@ import username from 'flarum/common/helpers/username';
 import Group from 'flarum/common/models/Group';
 import extractText from 'flarum/common/utils/extractText';
 import ItemList from 'flarum/common/utils/ItemList';
+import AuditLog from '../models/AuditLog';
 
 const translationPrefix = 'kilowhat-audit.lib.browser.';
 
-function formatGroups(groupIds, emptyIsAdmin = false) {
-    let groupIdsCopy = groupIds ? JSON.parse(JSON.stringify(groupIds)) : [];
+function formatGroups(groupIds: string[] | null | undefined, emptyIsAdmin = false) {
+    let groupIdsCopy: string[] = groupIds ? JSON.parse(JSON.stringify(groupIds)) : [];
 
     if (!groupIdsCopy.length) {
         if (emptyIsAdmin) {
@@ -56,18 +58,21 @@ function formatGroups(groupIds, emptyIsAdmin = false) {
     }).map((vnode, index) => [index > 0 ? ', ' : null, vnode]);
 }
 
-function formatTags(tagSlugs) {
+function formatTags(tagSlugs: string[] | null | undefined) {
     let tagSlugsCopy = tagSlugs || [];
 
     return tagSlugsCopy.map((slug, index) => [index > 0 ? ', ' : null, m('code', slug)]);
 }
 
-export default class AuditItem {
-    oninit() {
-        this.showRaw = false;
-    }
+interface AuditItemAttrs {
+    log: AuditLog
+    changeQuery: (q: string) => void
+}
 
-    view(vnode) {
+export default class AuditItem implements ClassComponent<AuditItemAttrs> {
+    showRaw: boolean = false
+
+    view(vnode: Vnode<AuditItemAttrs>) {
         const {log, changeQuery} = vnode.attrs;
 
         const actor = log.actor();
@@ -95,7 +100,7 @@ export default class AuditItem {
             }, app.translator.trans(translationPrefix + 'client.' + log.client())));
         }
 
-        clientRow.push(humanTime(log.createdAt()));
+        clientRow.push(humanTime(log.createdAt()!));
 
         let avatarElement;
 
@@ -221,6 +226,8 @@ export default class AuditItem {
                 new_date: payload.new_date ? dayjs(payload.new_date).format('LLLL') : m('em', app.translator.trans(translationPrefix + 'noValue')),
 
                 reason: payload.reason ? m('code', payload.reason) : m('em', app.translator.trans(translationPrefix + 'noReason')),
+
+                deleted_count: payload.deleted_count,
             };
 
             formattedPayload = app.translator.trans(translationKeyForPayload, parameters);

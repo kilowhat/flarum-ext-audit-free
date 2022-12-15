@@ -10,7 +10,11 @@
     "license": "proprietary",
     "require": {
         "flarum/core": "^1.2",
+        "kilowhat/flarum-database-requirements": "^1.0",
         "ext-json": "*"
+    },
+    "require-dev": {
+        "flarum/tags": "*"
     },
     "replace": {
         "kilowhat/flarum-ext-audit": "*",

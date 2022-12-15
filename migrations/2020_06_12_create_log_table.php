@@ -22,6 +22,7 @@ return [
         });
     },
     'down' => function (Builder $schema) {
-        $schema->dropIfExists('kilowhat_audit_log');
+        // Don't delete table, as it would be an easy way for an attacker to erase all logs
+        // Instead, the special CLI command should be used to delete the data
     },
 ];

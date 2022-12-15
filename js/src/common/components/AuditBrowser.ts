@@ -1,20 +1,26 @@
-import app from 'flarum/app';
-import Component from 'flarum/common/Component';
+import app from 'flarum/common/app';
+import Component, {ComponentAttrs} from 'flarum/common/Component';
+import {ApiResponsePlural} from 'flarum/common/Store';
 import Button from 'flarum/common/components/Button';
 import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
 import Placeholder from 'flarum/common/components/Placeholder';
 import AuditItem from './AuditItem';
+import AuditLog from '../models/AuditLog';
 
 const translationPrefix = 'kilowhat-audit.lib.browser.';
 
-export default class AuditBrowser extends Component {
-    oninit(vnode) {
-        super.oninit(vnode);
+interface AuditBrowserAttrs extends ComponentAttrs {
+    baseQ?: string
+}
 
-        this.q = '';
-        this.loading = true;
-        this.moreResults = false;
-        this.logs = [];
+export default class AuditBrowser extends Component<AuditBrowserAttrs> {
+    q: string = ''
+    loading: boolean = true
+    moreResults: boolean = false
+    logs: AuditLog[] = []
+
+    oninit(vnode: any) {
+        super.oninit(vnode);
 
         this.refresh();
     }
@@ -36,8 +42,8 @@ export default class AuditBrowser extends Component {
                 m('.AuditSearchWrapper', [
                     m('input.FormControl', {
                         value: this.q,
-                        onchange: event => {
-                            this.q = event.target.value;
+                        onchange: (event: InputEvent) => {
+                            this.q = (event.target as HTMLInputElement).value;
                         },
                         placeholder: app.translator.trans(translationPrefix + 'filterPlaceholder'),
                     }),
@@ -62,7 +68,7 @@ export default class AuditBrowser extends Component {
             }) : null,
             m('.AuditList', this.logs.map(log => m(AuditItem, {
                 log,
-                changeQuery: q => {
+                changeQuery: (q: string) => {
                     this.q = q;
                     this.refresh();
                 },
@@ -71,8 +77,8 @@ export default class AuditBrowser extends Component {
         ]);
     }
 
-    requestParams() {
-        const params = {filter: {}};
+    requestParams(): any {
+        const params: any = {filter: {}};
 
         let q = this.attrs.baseQ || '';
 
@@ -105,11 +111,11 @@ export default class AuditBrowser extends Component {
         );
     }
 
-    loadResults(offset) {
+    loadResults(offset: number | undefined = undefined) {
         const params = this.requestParams();
         params.page = {offset};
 
-        return app.store.find('kilowhat-audit/logs', params);
+        return app.store.find<AuditLog[]>('kilowhat-audit/logs', params);
     }
 
     loadMore() {
@@ -119,11 +125,11 @@ export default class AuditBrowser extends Component {
             .then(this.parseResults.bind(this));
     }
 
-    parseResults(results) {
-        [].push.apply(this.logs, results);
+    parseResults(results: ApiResponsePlural<AuditLog>) {
+        [].push.apply(this.logs, results as any);
 
         this.loading = false;
-        this.moreResults = !!results.payload.links.next;
+        this.moreResults = !!results.payload.links?.next;
 
         m.redraw();
 

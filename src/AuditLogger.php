@@ -28,6 +28,12 @@ class AuditLogger
      */
     public static $path = null;
 
+    /**
+     * Used internally to disable the logger after the database table has been intentionally destroyed
+     * @var bool
+     */
+    public static $disabled = false;
+
     protected static function getClient(): string
     {
         if (self::$client) {
@@ -43,6 +49,10 @@ class AuditLogger
 
     public static function log(string $action, array $payload = [])
     {
+        if (self::$disabled) {
+            return;
+        }
+
         $actorId = self::$actor ? self::$actor->id : null;
 
         $log = new AuditLog();
