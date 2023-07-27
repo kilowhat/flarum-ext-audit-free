@@ -113,7 +113,7 @@ class CoreUserEvents implements ExtenderInterface
     {
         $oldGroupIds = Arr::pluck($event->oldGroups, 'id');
         // Cannot directly read $user->groups because it's preloaded with old values, same issue as https://github.com/flarum/core/issues/2514
-        $newGroupIds = $event->user->groups()->pluck('id');
+        $newGroupIds = $event->user->groups()->pluck('groups.id');
 
         if (json_encode($oldGroupIds) !== json_encode($newGroupIds)) {
             $this->log($event->user, 'groups_changed', [
