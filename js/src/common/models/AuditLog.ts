@@ -14,6 +14,7 @@ export default class AuditLog extends Model {
 
     actor = Model.hasOne<User>('actor');
     discussion = Model.hasOne<Discussion>('discussion');
+    newDiscussion = Model.hasOne<Discussion>('newDiscussion');
     post = Model.hasOne<Post>('post');
     tag = Model.hasOne<Tag>('tag');
     user = Model.hasOne<User>('user');

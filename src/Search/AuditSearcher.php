@@ -11,7 +11,8 @@ class AuditSearcher extends AbstractSearcher
 {
     protected function getQuery(User $actor): Builder
     {
-        // Access control is managed at the controller level, not per record
+        $actor->assertAdmin();
+
         return AuditLog::query();
     }
 }

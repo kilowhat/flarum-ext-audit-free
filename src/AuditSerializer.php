@@ -39,6 +39,11 @@ class AuditSerializer extends AbstractSerializer
         return $this->hasOne($log, BasicDiscussionSerializer::class);
     }
 
+    public function newDiscussion($log): ?Relationship
+    {
+        return $this->hasOne($log, BasicDiscussionSerializer::class);
+    }
+
     public function post($log): ?Relationship
     {
         return $this->hasOne($log, BasicPostSerializer::class);

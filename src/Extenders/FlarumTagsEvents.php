@@ -22,7 +22,7 @@ class FlarumTagsEvents implements ExtenderInterface
             'discussion_id' => $event->discussion->id,
             'old_tags' => Arr::pluck($event->oldTags, 'slug'),
             // Can't use pre-loaded ->tags because of https://github.com/flarum/core/issues/2514
-            'new_tags' => $event->discussion->tags()->pluck('slug')->all(),
+            'new_tags' => $event->discussion->tags()->pluck('tags.slug')->all(),
         ]);
     }
 }

@@ -43,6 +43,13 @@ class AuditLog extends AbstractModel
         return $discussionId ? Discussion::query()->find($discussionId) : null;
     }
 
+    public function getNewDiscussionAttribute(): ?Discussion
+    {
+        $discussionId = Arr::get($this->payload, 'new_discussion_id');
+
+        return $discussionId ? Discussion::query()->find($discussionId) : null;
+    }
+
     public function getPostAttribute(): ?Post
     {
         $postId = Arr::get($this->payload, 'post_id');

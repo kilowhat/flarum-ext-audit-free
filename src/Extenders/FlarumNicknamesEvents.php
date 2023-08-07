@@ -38,10 +38,13 @@ class FlarumNicknamesEvents implements ExtenderInterface
 
     public function saving(Saving $event)
     {
-        $attributes = Arr::get($event->data, 'attributes', []);
+        $attributes = (array)Arr::get($event->data, 'attributes');
 
         if (isset($attributes['nickname']) && $event->user->isDirty('nickname')) {
             $this->originalNickname = $event->user->getOriginal('nickname');
+        } else {
+            // Reset in case other user operations happen during the same lifecycle, we don't need multiple logs
+            $this->originalNickname = false;
         }
     }
 }

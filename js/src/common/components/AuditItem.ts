@@ -78,6 +78,7 @@ export default class AuditItem implements ClassComponent<AuditItemAttrs> {
         const actor = log.actor();
         const payload = log.payload() || {};
         const discussion = log.discussion();
+        const newDiscussion = log.newDiscussion();
         const post = log.post();
         const tag = log.tag();
         const user = log.user();
@@ -165,6 +166,12 @@ export default class AuditItem implements ClassComponent<AuditItemAttrs> {
                     id: payload.discussion_id,
                 })),
 
+                new_discussion: m('a', {
+                    href: newDiscussion ? app.route.discussion(newDiscussion) : '#',
+                }, newDiscussion ? newDiscussion.title() : app.translator.trans(translationPrefix + 'deletedResource.discussion', {
+                    id: payload.new_discussion_id,
+                })),
+
                 tag: m('a', {
                     href: tag ? app.route.tag(tag) : '#',
                 }, tag ? tag.name() : app.translator.trans(translationPrefix + 'deletedResource.tag', {
@@ -213,6 +220,7 @@ export default class AuditItem implements ClassComponent<AuditItemAttrs> {
                 old_tags: formatTags(payload.old_tags),
                 new_tags: formatTags(payload.new_tags),
 
+                original_discussion_ids_count: Array.isArray(payload.original_discussion_ids) ? payload.original_discussion_ids.length : m('em', app.translator.trans(translationPrefix + 'noValue')),
                 post_count: payload.post_count,
 
                 old_user: payload.old_user_id ? app.translator.trans(translationPrefix + 'deletedResource.user', {

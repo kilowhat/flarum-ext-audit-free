@@ -19,6 +19,7 @@ class AuditIndexController extends AbstractListController
     public $include = [
         'actor',
         'discussion',
+        'newDiscussion',
         'post.discussion',
         'post.user',
         'user',
@@ -48,8 +49,6 @@ class AuditIndexController extends AbstractListController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
-
-        $actor->assertAdmin();
 
         if ($this->extensions->isEnabled('flarum-tags')) {
             $this->include[] = 'tag';
